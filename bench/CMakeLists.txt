@@ -1,5 +1,6 @@
 add_executable(bench
     bench_main.cpp
+    bench_encrypt_block.cpp
 )
 set_target_properties(bench PROPERTIES CXX_STANDARD 11)
 target_compile_options(bench PRIVATE "-Wall" "-Wextra" "-pedantic")
