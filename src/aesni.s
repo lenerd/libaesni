@@ -141,6 +141,19 @@ aesni_encrypt_block_128:
 # rdi: pointer to output
 # rsi: pointer to input
 # rdx: pointer to round keys
+movdqa xmm0, [rsi]
+pxor xmm0, [rdx]
+aesenc xmm0, 0x10[rdx]
+aesenc xmm0, 0x20[rdx]
+aesenc xmm0, 0x30[rdx]
+aesenc xmm0, 0x40[rdx]
+aesenc xmm0, 0x50[rdx]
+aesenc xmm0, 0x60[rdx]
+aesenc xmm0, 0x70[rdx]
+aesenc xmm0, 0x80[rdx]
+aesenc xmm0, 0x90[rdx]
+aesenclast xmm0, 0xa0[rdx]
+movdqa [rdi], xmm0
 ret
 
 
@@ -149,4 +162,21 @@ aesni_encrypt_block_256:
 # rdi: pointer to output
 # rsi: pointer to input
 # rdx: pointer to round keys
+movdqa xmm0, [rsi]
+pxor xmm0, [rdx]
+aesenc xmm0, 0x10[rdx]
+aesenc xmm0, 0x20[rdx]
+aesenc xmm0, 0x30[rdx]
+aesenc xmm0, 0x40[rdx]
+aesenc xmm0, 0x50[rdx]
+aesenc xmm0, 0x60[rdx]
+aesenc xmm0, 0x70[rdx]
+aesenc xmm0, 0x80[rdx]
+aesenc xmm0, 0x90[rdx]
+aesenc xmm0, 0xa0[rdx]
+aesenc xmm0, 0xb0[rdx]
+aesenc xmm0, 0xc0[rdx]
+aesenc xmm0, 0xd0[rdx]
+aesenclast xmm0, 0xe0[rdx]
+movdqa [rdi], xmm0
 ret
