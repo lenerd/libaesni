@@ -6,7 +6,7 @@ project(libaesni
     LANGUAGES C CXX ASM
 )
 
-option(LIBAESNI_TEST "build tests" ON)
+option(LIBAESNI_TEST "build tests and benchmarks" ON)
 
 add_library(libaesni
     src/aesni.s
@@ -15,6 +15,10 @@ set_target_properties(libaesni PROPERTIES OUTPUT_NAME aesni)
 target_include_directories(libaesni INTERFACE include)
 
 if(LIBAESNI_TEST)
-    add_subdirectory(extern/googletest)
+    add_subdirectory(extern/googletest/googletest)
     add_subdirectory(test)
+
+    set(BENCHMARK_ENABLE_TESTING OFF CACHE BOOL "Suppressing benchmark's tests" FORCE)
+    add_subdirectory(extern/benchmark)
+    add_subdirectory(bench)
 endif()
