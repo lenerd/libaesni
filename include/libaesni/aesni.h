@@ -6,10 +6,36 @@ extern "C" {
 #endif
 
 #include <stdbool.h>
+#include <stddef.h>
 
 #ifdef __cplusplus
 namespace libaesni {
 #endif
+
+/**
+ * Size of an AES block in bytes.
+ */
+const size_t aesni_block_size = 16;
+
+/**
+ * Size of an AES-128 key in bytes.
+ */
+const size_t aesni_key_size_128 = 16;
+
+/**
+ * Size of an AES-256 key in bytes.
+ */
+const size_t aesni_key_size_256 = 32;
+
+/**
+ * Size of the AES-128 round keys in bytes.
+ */
+const size_t aesni_round_keys_size_128 = 176;
+
+/**
+ * Size of an AES-256 round keys in bytes.
+ */
+const size_t aesni_round_keys_size_256 = 240;
 
 /**
  * Check whether the AES-NI instructions are available using the cpuid
