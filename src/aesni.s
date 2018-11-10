@@ -57,3 +57,11 @@ movdqa 0x90[rdi], xmm1
 aes_key_expand 0x36
 movdqa 0xa0[rdi], xmm1
 ret
+
+
+.globl aesni_key_expansion_256
+aesni_key_expansion_256:
+# rdi: pointer to output
+# rsi: pointer to key
+# TODO: implement
+ret
