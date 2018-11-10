@@ -134,3 +134,19 @@ aes_key_expand_256_1 0x40
 movdqa 0xe0[rdi], xmm1
 
 ret
+
+
+.globl aesni_encrypt_block_128
+aesni_encrypt_block_128:
+# rdi: pointer to output
+# rsi: pointer to input
+# rdx: pointer to round keys
+ret
+
+
+.globl aesni_encrypt_block_256
+aesni_encrypt_block_256:
+# rdi: pointer to output
+# rsi: pointer to input
+# rdx: pointer to round keys
+ret

@@ -30,9 +30,15 @@ void aesni_key_expansion_128(void* round_keys, const void* key);
 void aesni_key_expansion_256(void* round_keys, const void* key);
 
 /**
- * Run the AES permutation on a single block of 16 byte.
+ * Run the AES-128 permutation on a single block of 16 byte.
  */
 void aesni_encrypt_block_128(void* ciphertext, const void* plaintext, const void* round_keys);
+
+/**
+ * Run the AES-256 permutation on a single block of 16 byte.
+ */
+void aesni_encrypt_block_256(void* ciphertext, const void* plaintext, const void* round_keys);
+
 
 /**
  * Run the inverse AES permutation on a single block of 16 byte.
