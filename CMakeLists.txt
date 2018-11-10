@@ -15,5 +15,6 @@ set_target_properties(libaesni PROPERTIES OUTPUT_NAME aesni)
 target_include_directories(libaesni INTERFACE include)
 
 if(LIBAESNI_TEST)
+    add_subdirectory(extern/googletest)
     add_subdirectory(test)
 endif()
