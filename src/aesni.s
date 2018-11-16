@@ -180,3 +180,12 @@ aesenc xmm0, 0xd0[rdx]
 aesenclast xmm0, 0xe0[rdx]
 movdqa [rdi], xmm0
 ret
+
+
+.globl aesni_encrypt_blocks_128
+aesni_encrypt_blocks_128:
+# rdi: pointer to output
+# rsi: pointer to input
+# rdx: pointer to round keys
+# rcx: number of blocks
+ret

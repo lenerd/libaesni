@@ -65,6 +65,12 @@ void aesni_encrypt_block_128(void* ciphertext, const void* plaintext, const void
  */
 void aesni_encrypt_block_256(void* ciphertext, const void* plaintext, const void* round_keys);
 
+/**
+ * Run the AES-128 permutation on a number of block of 16 byte each.
+ */
+void aesni_encrypt_blocks_128(void* ciphertext, const void* plaintext, const void* round_keys,
+                              size_t num_blocks);
+
 
 /**
  * Run the inverse AES permutation on a single block of 16 byte.
