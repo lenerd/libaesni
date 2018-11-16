@@ -188,4 +188,43 @@ aesni_encrypt_blocks_128:
 # rsi: pointer to input
 # rdx: pointer to round keys
 # rcx: number of blocks
+
+movdqa xmm0, [rdx]
+movdqa xmm1, 0x10[rdx]
+movdqa xmm2, 0x20[rdx]
+movdqa xmm3, 0x30[rdx]
+movdqa xmm4, 0x40[rdx]
+movdqa xmm5, 0x50[rdx]
+movdqa xmm6, 0x60[rdx]
+movdqa xmm7, 0x70[rdx]
+movdqa xmm8, 0x80[rdx]
+movdqa xmm9, 0x90[rdx]
+movdqa xmm10, 0xa0[rdx]
+
+jmp 1f
+
+0:
+
+movdqa xmm11, [rsi]
+pxor xmm11, xmm0
+aesenc xmm11, xmm1
+aesenc xmm11, xmm2
+aesenc xmm11, xmm3
+aesenc xmm11, xmm4
+aesenc xmm11, xmm5
+aesenc xmm11, xmm6
+aesenc xmm11, xmm7
+aesenc xmm11, xmm8
+aesenc xmm11, xmm9
+aesenclast xmm11, xmm10
+movdqa [rdi], xmm11
+
+dec rcx
+add rdi, 0x10
+add rsi, 0x10
+
+1:
+test rcx, rcx
+jnz 0b
+
 ret
