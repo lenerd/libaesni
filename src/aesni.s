@@ -1,5 +1,13 @@
 .intel_syntax noprefix
 
+# Note that an executable stack is not required.  If this is not explicitly
+# specified, the resulting program has executable stacks.
+
+#if defined(__linux__) && defined(__ELF__)
+.section .note.GNU-stack, "", %progbits
+#endif
+
+
 .text
 
 .globl aesni_available
