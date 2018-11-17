@@ -190,6 +190,9 @@ movdqa [rdi], xmm0
 ret
 
 
+################################################################################
+
+
 .globl aesni_encrypt_blocks_128
 aesni_encrypt_blocks_128:
 # rdi: pointer to output
@@ -197,6 +200,16 @@ aesni_encrypt_blocks_128:
 # rdx: pointer to round keys
 # rcx: number of blocks
 
+# prepare counter
+shl rcx, 4      # compute number of bytes (one block is 16B)
+jz 3f           # nothing to do: goto end
+sub rcx, 0x40   # decrease counter by unroll factor x block size
+# point to last 4 blocks of the arrays
+lea rdi, [rdi+rcx]
+lea rsi, [rsi+rcx]
+neg rcx         # negate counter
+
+# load round keys into registers
 movdqa xmm0, [rdx]
 movdqa xmm1, 0x10[rdx]
 movdqa xmm2, 0x20[rdx]
@@ -209,11 +222,75 @@ movdqa xmm8, 0x80[rdx]
 movdqa xmm9, 0x90[rdx]
 movdqa xmm10, 0xa0[rdx]
 
-jmp 1f
+jg 1f   # if < 4 blocks to compute: skip main loop
 
+# main loop: 4x unrolled
 0:
+movdqa xmm11, [rsi+rcx]
+movdqa xmm12, [rsi+rcx+0x10]
+movdqa xmm13, [rsi+rcx+0x20]
+movdqa xmm14, [rsi+rcx+0x30]
+pxor xmm11, xmm0
+pxor xmm12, xmm0
+pxor xmm13, xmm0
+pxor xmm14, xmm0
+aesenc xmm11, xmm1
+aesenc xmm12, xmm1
+aesenc xmm13, xmm1
+aesenc xmm14, xmm1
+aesenc xmm11, xmm2
+aesenc xmm12, xmm2
+aesenc xmm13, xmm2
+aesenc xmm14, xmm2
+aesenc xmm11, xmm3
+aesenc xmm12, xmm3
+aesenc xmm13, xmm3
+aesenc xmm14, xmm3
+aesenc xmm11, xmm4
+aesenc xmm12, xmm4
+aesenc xmm13, xmm4
+aesenc xmm14, xmm4
+aesenc xmm11, xmm5
+aesenc xmm12, xmm5
+aesenc xmm13, xmm5
+aesenc xmm14, xmm5
+aesenc xmm11, xmm6
+aesenc xmm12, xmm6
+aesenc xmm13, xmm6
+aesenc xmm14, xmm6
+aesenc xmm11, xmm7
+aesenc xmm12, xmm7
+aesenc xmm13, xmm7
+aesenc xmm14, xmm7
+aesenc xmm11, xmm8
+aesenc xmm12, xmm8
+aesenc xmm13, xmm8
+aesenc xmm14, xmm8
+aesenc xmm11, xmm9
+aesenc xmm12, xmm9
+aesenc xmm13, xmm9
+aesenc xmm14, xmm9
+aesenclast xmm11, xmm10
+aesenclast xmm12, xmm10
+aesenclast xmm13, xmm10
+aesenclast xmm14, xmm10
+movdqa [rdi+rcx], xmm11
+movdqa [rdi+rcx+0x10], xmm12
+movdqa [rdi+rcx+0x20], xmm13
+movdqa [rdi+rcx+0x30], xmm14
 
-movdqa xmm11, [rsi]
+# increase counter by the size of four blocks
+add rcx, 0x40
+jle 0b  # while counter not positive, loop
+
+# check for remainder (counter is in [1,4]*0x10)
+1:
+sub rcx, 0x40
+jz 3f   # no blocks remain: goto end
+
+# compute remaining blocks in a loop
+2:
+movdqa xmm11, [rsi+rcx+0x40]
 pxor xmm11, xmm0
 aesenc xmm11, xmm1
 aesenc xmm11, xmm2
@@ -225,14 +302,13 @@ aesenc xmm11, xmm7
 aesenc xmm11, xmm8
 aesenc xmm11, xmm9
 aesenclast xmm11, xmm10
-movdqa [rdi], xmm11
+movdqa [rdi+rcx+0x40], xmm11
+add rcx, 0x10
+js 2b
 
-dec rcx
-add rdi, 0x10
-add rsi, 0x10
-
-1:
-test rcx, rcx
-jnz 0b
-
+# end
+3:
 ret
+
+
+################################################################################
