@@ -67,6 +67,44 @@ movdqa 0xa0[rdi], xmm1
 ret
 
 
+.globl aesni_key_expansion_inv_128
+aesni_key_expansion_inv_128:
+# rdi: pointer to output
+# rsi: pointer to key
+movdqa xmm1, [rsi]
+movdqa [rdi], xmm1
+aes_key_expand 0x01
+aesimc xmm2, xmm1
+movdqa 0x10[rdi], xmm2
+aes_key_expand 0x02
+aesimc xmm2, xmm1
+movdqa 0x20[rdi], xmm2
+aes_key_expand 0x04
+aesimc xmm2, xmm1
+movdqa 0x30[rdi], xmm2
+aes_key_expand 0x08
+aesimc xmm2, xmm1
+movdqa 0x40[rdi], xmm2
+aes_key_expand 0x10
+aesimc xmm2, xmm1
+movdqa 0x50[rdi], xmm2
+aes_key_expand 0x20
+aesimc xmm2, xmm1
+movdqa 0x60[rdi], xmm2
+aes_key_expand 0x40
+aesimc xmm2, xmm1
+movdqa 0x70[rdi], xmm2
+aes_key_expand 0x80
+aesimc xmm2, xmm1
+movdqa 0x80[rdi], xmm2
+aes_key_expand 0x1b
+aesimc xmm2, xmm1
+movdqa 0x90[rdi], xmm2
+aes_key_expand 0x36
+movdqa 0xa0[rdi], xmm1
+ret
+
+
 .macro aes_key_expand_256_1 rcon
 # old in xmm1
 aeskeygenassist xmm4, xmm2, \rcon
@@ -161,6 +199,27 @@ aesenc xmm0, 0x70[rdx]
 aesenc xmm0, 0x80[rdx]
 aesenc xmm0, 0x90[rdx]
 aesenclast xmm0, 0xa0[rdx]
+movdqa [rdi], xmm0
+ret
+
+
+.globl aesni_decrypt_block_128
+aesni_decrypt_block_128:
+# rdi: pointer to output
+# rsi: pointer to input
+# rdx: pointer to round keys
+movdqa xmm0, [rsi]
+pxor xmm0, 0xa0[rdx]
+aesdec xmm0, 0x90[rdx]
+aesdec xmm0, 0x80[rdx]
+aesdec xmm0, 0x70[rdx]
+aesdec xmm0, 0x60[rdx]
+aesdec xmm0, 0x50[rdx]
+aesdec xmm0, 0x40[rdx]
+aesdec xmm0, 0x30[rdx]
+aesdec xmm0, 0x20[rdx]
+aesdec xmm0, 0x10[rdx]
+aesdeclast xmm0, [rdx]
 movdqa [rdi], xmm0
 ret
 

@@ -50,6 +50,12 @@ bool aesni_available();
 void aesni_key_expansion_128(void* round_keys, const void* key);
 
 /**
+ * Run the AES key expansion algorithm to generate the round keys for
+ * decryption for 128 bit keys.
+ */
+void aesni_key_expansion_inv_128(void* round_keys, const void* key);
+
+/**
  * Run the AES key expansion algorithm to generate the round keys for 256 bit
  * keys.
  */

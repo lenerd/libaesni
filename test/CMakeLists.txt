@@ -2,6 +2,8 @@ add_executable(unit_test
     test_main.cpp
     test_key_expansion.cpp
     test_encrypt_block.cpp
+    test_decrypt_block.cpp
+    test_encrypt_decrypt_block.cpp
 )
 set_target_properties(unit_test PROPERTIES CXX_STANDARD 11)
 target_compile_options(unit_test PRIVATE "-Wall" "-Wextra" "-pedantic")
